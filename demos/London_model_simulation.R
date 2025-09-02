@@ -1,5 +1,5 @@
-source('functions_updated.r')
-source('London_model_simulations_updated.R')
+source('simulation/utility_functions.r')
+source('simulation/London_model_simulation_functions.R')
 pacman::p_load(segmented, igraph, RSpectra, locfit, tidyverse, doParallel, broom, vegan, Matrix)
 library(igraph)
 library(iGraphMatch)
