@@ -148,7 +148,7 @@ true_London_dMV <- function(tt,t0,p,q,delta){
 }
 
 
-
+## W1 distance matrix given latent position list
 getD_W1 <- function(Xlist) {
   
   m <- length(Xlist)
@@ -171,7 +171,7 @@ getD_W1 <- function(Xlist) {
   D2
 }
 
-
+## W2 distance matrix given latent position list
 getD_W2 <- function(Xlist) {
   
   m <- length(Xlist)
@@ -194,7 +194,7 @@ getD_W2 <- function(Xlist) {
   D2
 }
 
-
+# The true W1 square distance in London model. 
 true_W1_square_London <- function(tt,t0,p,q,delta){
   D=matrix(0,tt,tt)
   for (i in 1:t0) {
@@ -221,7 +221,7 @@ true_W1_square_London <- function(tt,t0,p,q,delta){
   return(D2)
 }
 
-
+# Takes two graphs; stand and mess. matches mess with stand and return it.
 graph_mathing <- function(stand,mess,max_it){
   G1=as.matrix( stand )
   G2=as.matrix( mess )
@@ -249,8 +249,8 @@ procrustes2 <- function(X, Y) {
 }
 
 
-## Get distance matrix
-getD <- function(Xlist, k=0, etype="proc") {
+## Get dMV distance matrix
+getD <- function(Xlist, k=0, etype="proc", Yhat = NULL) {
   m <- length(Xlist)
   if (k==0) {
     ind <- 1:n
@@ -284,8 +284,8 @@ getD <- function(Xlist, k=0, etype="proc") {
   D2
 }
 
-## Apply CMDS on distance matrix 
-doMDS <- function(D, doplot=TRUE)
+## Apply CMDS on distance matrix D
+doMDS <- function(D, doplot=FALSE, tstar = 0)
 {
   tmax <- m <- nrow(D)
   mds <- cmdscale(D, m-1)
@@ -362,7 +362,7 @@ doMDS <- function(D, doplot=TRUE)
   return(list(mds=mds, df.mds=df.mds))
 }
 
-#apply ISOMAP on the CMDS result with chosen dimension mdsd from CMDS step defaultly it always embeds to 1 
+#apply ISOMAP on the CMDS result with chosen dimension mdsd from CMDS step by default it always embeds to 1 
 doIso <- function(mds, mdsd=2, isod=1, doplot=F)
 {
   df.iso <- NULL
@@ -397,25 +397,25 @@ doIso <- function(mds, mdsd=2, isod=1, doplot=F)
     #    p <- p + scale_x_date(breaks = scales::breaks_pretty(8), labels=label_date_short())
     print(p)
     
-    df.isok <- df.iso %>% filter(mdsd==mdsd) #%>% mutate(date2 = format(ymd(paste0(date,"-01")),"%m/%y"))
-    row.names(df.isok) <- df.isok$time
-    fit <- lm(iso ~ i, data=df.isok)
+    # df.isok <- df.iso %>% filter(mdsd==mdsd) #%>% mutate(date2 = format(ymd(paste0(date,"-01")),"%m/%y"))
+    # row.names(df.isok) <- df.isok$time
+    # fit <- lm(iso ~ i, data=df.isok)
     # print(tidy(fit))
     # print(glance(fit))
-    myfor <- augment(fit)
-    myfor2 <- myfor %>% mutate(date=.rownames,
-                               ranks = rank(.sigma),
-                               mycol=sprintf("%2d",rank(.fitted)))
-    p <- myfor2 %>%
-      ggplot(aes(.fitted, .resid)) +
-      geom_point(aes(color=mycol)) +
-      geom_hline(yintercept = 0, linetype="dashed", color="grey") +
-      geom_smooth(method="loess", se=FALSE) +
-      labs(x="Fitted Values", y="Residuals") +
-      theme(legend.position = "none",
-            axis.title = element_text(size=14, face="bold"))
-    p <- p + geom_label_repel(aes(label=date), data=myfor2 %>% filter(ranks %in% 1:3))
-    print(p)
+    # myfor <- augment(fit)
+    # myfor2 <- myfor %>% mutate(date=.rownames,
+    #                           ranks = rank(.sigma),
+    #                           mycol=sprintf("%2d",rank(.fitted)))
+    # p <- myfor %>%
+    #  ggplot(aes(.fitted, .resid)) +
+    #  geom_point(aes(color=mycol)) +
+    #  geom_hline(yintercept = 0, linetype="dashed", color="grey") +
+    #  geom_smooth(method="loess", se=FALSE) +
+    #  labs(x="Fitted Values", y="Residuals") +
+    #  theme(legend.position = "none",
+    #        axis.title = element_text(size=14, face="bold"))
+    # p <- p + geom_label_repel(aes(label=date), data=myfor %>% filter(ranks %in% 1:3))
+    # print(p)
   }
   
   return(df.iso)
