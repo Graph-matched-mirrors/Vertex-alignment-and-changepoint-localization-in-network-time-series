@@ -48,6 +48,16 @@ full.ase <- function(A, d, diagaug=TRUE, doptr=FALSE) {
   return(list(eval=A.svd$d, Xhat=Matrix(Xhat), Xhat.R=Xhat.R))
 }
 
+## shuffle the bottom del% of the vector x
+shuffle_X <- function(X,del){
+  n=nrow(X)
+  dn=floor(del*n)
+  permu_vec=sample(1:dn)
+  random_perm=diag(dn)[permu_vec,]
+  a=bdiag(diag(n-dn), random_perm)
+  random_perm=as.matrix(a)
+  return(random_perm %*% X)
+}
 
 ## del is the set of shuffle percetage you want
 doSim_London <- function(n=300, tmax=40, delta=0.1, p=0.4, q=0.9, tstar=20 , del = c(1))
@@ -85,24 +95,27 @@ doSim_London <- function(n=300, tmax=40, delta=0.1, p=0.4, q=0.9, tstar=20 , del
 }
 
 
-## true dmv distance
-true_distance=function(m,p){
+## true London dmv distance with m steps and prob of p and increment of delta
+true_distance <- function(m,p,delta){
   return( (m*(m-1)*p^2+m*p)*delta^2 )
 }
 
-##CMDS on the true distance matrix for model with change point                  
-true_London_dMV = function(tt,t0,p,q){
+## distance matrix for model with change point                  
+# tt steps in total, changepoint at t0
+# prob p before changepoint, q after
+# increment delta
+true_London_dMV <- function(tt,t0,p,q,delta){
   
   D=matrix(0,tt,tt)
   for (i in 1:t0) {
     for (j in (i):t0) {
-      D[i,j]=sqrt(true_distance(abs(i-j),p))
+      D[i,j]=sqrt(true_distance(abs(i-j),p,delta))
     }
   }
   
   for (i in t0:tt) {
     for (j in (i):tt) {
-      D[i,j]=sqrt(true_distance(abs(i-j),q))
+      D[i,j]=sqrt(true_distance(abs(i-j),q,delta))
     }
   }
   
@@ -110,13 +123,15 @@ true_London_dMV = function(tt,t0,p,q){
     for (j in (t0+1):tt) {
       m=t0-i
       n=j-t0
-      D[i,j]=sqrt(true_distance(m,p)+true_distance(n,q)+2*m*n*p*q*delta^2)
+      D[i,j]=sqrt(true_distance(m,p,delta)+true_distance(n,q,delta)+2*m*n*p*q*delta^2)
     }
   }
   
   D=D+t(D)
   
   return(D)
+  
+  # CMDS:
   #D2=D^2
   
   #P=diag(rep(1,tt))-rep(1,tt)%*%t(rep(1,tt))/tt
@@ -135,9 +150,9 @@ true_London_dMV = function(tt,t0,p,q){
 
 
 getD_W1 <- function(Xlist) {
-  Xlist= df$Xt
+  
   m <- length(Xlist)
-  ind <- 1:n
+  ind <- 1:m
   
   comb <- combn(m,2)
   Dout <- foreach (k = 1:ncol(comb), .combine='rbind') %dopar% {
@@ -158,9 +173,9 @@ getD_W1 <- function(Xlist) {
 
 
 getD_W2 <- function(Xlist) {
-  Xlist= df$Xt
+  
   m <- length(Xlist)
-  ind <- 1:n
+  ind <- 1:m
   
   comb <- combn(m,2)
   Dout <- foreach (k = 1:ncol(comb), .combine='rbind') %dopar% {
@@ -180,7 +195,7 @@ getD_W2 <- function(Xlist) {
 }
 
 
-true_W1_square_London = function(tt,t0,p,q){
+true_W1_square_London <- function(tt,t0,p,q,delta){
   D=matrix(0,tt,tt)
   for (i in 1:t0) {
     for (j in (i):t0) {
@@ -530,17 +545,6 @@ linf_error=function(x){
   }
   ecp=min(which(obf==min(obf[-1])))
   return( c((ecp-tstar)/tmax ,  ecp) )
-}
-
-
-shuffle_X <- function(X,del){
-  n=nrow(X)
-  dn=floor(del*n)
-  permu_vec=sample(1:dn)
-  random_perm=diag(dn)[permu_vec,]
-  a=bdiag(diag(n-dn), random_perm)
-  random_perm=as.matrix(a)
-  return(random_perm %*% X)
 }
 
 ## true distance matrix for Atlanta model
