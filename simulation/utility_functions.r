@@ -152,7 +152,8 @@ true_London_dMV <- function(tt,t0,p,q,delta){
 getD_W1 <- function(Xlist) {
   
   m <- length(Xlist)
-  ind <- 1:m
+  n <- length(Xlist[[1]])
+  ind <- 1:n
   
   comb <- combn(m,2)
   Dout <- foreach (k = 1:ncol(comb), .combine='rbind') %dopar% {
@@ -161,6 +162,9 @@ getD_W1 <- function(Xlist) {
     
     Xhati <- Xlist[[i]][ind,] 
     Xhatj <- Xlist[[j]][ind,]
+    
+    proc <- procrustes2(as.matrix(Xhati), as.matrix(Xhatj))
+    Xhati <- Xhati %*% proc$W
     
     D <- mean( abs( sort(Xhatj) - sort(Xhati) ) )
     tibble(i=i, j=j, D=D)
@@ -751,3 +755,98 @@ paired_error_in_shuffling <- function(nmc = 50, n = 300, p = 0.4, q = 0.15, m = 
   row_sds <- apply(mc_errors, 1, function(row) sd(abs(row)^2) / sqrt(nmc)) # sd(abs(errors[row,])^2) / sqrt(nmc)
   cbind(row_mse, row_sds)
 }
+
+
+
+## NEW FUNCTIONS FOR THE FIGURES-- UNEDITED
+
+true_shuffled_dMV_square_London = function(tt,t0,p,q,delta){
+  
+  D=matrix(0,tt,tt)
+  for (i in 1:t0) {
+    for (j in (i):t0) {
+      D[i,j]=sqrt(delta^2*(p^2*(i-j)^2 + (p-p^2)*(i+j)))
+    }
+  }
+  
+  for (i in t0:tt) {
+    for (j in (i):tt) {
+      D[i,j]=sqrt(delta^2*(q^2*(i-j)^2 + (q-q^2)*(i+j) +2*t0*(p-p^2-q+q^2) ))
+    }
+  }
+  
+  for (i in 1:(t0-1)) {
+    for (j in (t0+1):tt) {
+      m=t0-i
+      n=j-t0
+      D[i,j]=sqrt( delta^2*( ( (j-t0)*q+(t0-i)*p  )^2 + (p-p^2)*(i+t0) +(q-q^2)*(j-t0)    )  )
+    }
+  }
+  D=D+t(D)
+  D2=D^2
+  diag(D2) = 0
+  return(D2)
+}
+
+
+true_W1_square_London = function(tt,t0,p,q,delta){
+  D=matrix(0,tt,tt)
+  for (i in 1:t0) {
+    for (j in (i):t0) {
+      D[i,j]=sqrt(delta^2*(p^2*(i-j)^2 ))
+    }
+  }
+  
+  for (i in t0:tt) {
+    for (j in (i):tt) {
+      D[i,j]=sqrt(delta^2*(q^2*(i-j)^2 ))
+    }
+  }
+  
+  for (i in 1:(t0-1)) {
+    for (j in (t0+1):tt) {
+      m=t0-i
+      n=j-t0
+      D[i,j]=sqrt( delta^2*( ( (j-t0)*q+(t0-i)*p  )^2    )  )
+    }
+  }
+  D=D+t(D)
+  D2=D^2
+  return(D2)
+}
+
+true_avg_degree = function(x){
+  
+  if (x < tstar +1 ){
+    y =  0.1+p*delta*x 
+  } else{
+    y = 0.1 + p*delta*tstar + (x - tstar)*q*delta
+  }
+  
+  return( y^2*(n-1))
+  
+}
+
+true_avg_degree = Vectorize(true_avg_degree)
+
+psi_Z = function(x, p, q){
+  if(x < 0.5){
+    y = p*x
+  } else {
+    y = p*0.5+(x - 0.5)* q
+  }
+  return(y)
+}
+psi_Z = Vectorize(psi_Z)
+
+psi_Z_center = function(x, p, q){
+  c0 = 0.5*(p-q)*(0.25-1)-q/2
+  if(x < 0.5){
+    y = p*x +c0
+  } else {
+    y = p*0.5+(x - 0.5)* q +c0
+  }
+  return(y)
+}
+psi_Z_center = Vectorize(psi_Z_center)
+
