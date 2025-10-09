@@ -251,6 +251,7 @@ procrustes2 <- function(X, Y) {
 
 ## Get dMV distance matrix
 getD <- function(Xlist, k=0, etype="proc", Yhat = NULL) {
+  n <- length(Xlist[[1]])
   m <- length(Xlist)
   if (k==0) {
     ind <- 1:n
@@ -422,7 +423,7 @@ doIso <- function(mds, mdsd=2, isod=1, doplot=F)
 }
 
 ## This is another slope change point algorithm called segmented that is not used in the paper 
-break_point_dection=function(D,k){
+break_point_dection <- function(D,k){
   tmax <- nrow(D)
   df.mds <- doMDS(D,doplot = F)
   mds <- df.mds$mds
@@ -437,13 +438,15 @@ break_point_dection=function(D,k){
 }
 
 ## find the point in time series with significant change in the slope
-find_slope_changepoint_with_plot <- function(y, doplot = TRUE) {
+find_slope_changepoint_with_plot <- function(y, doplot = TRUE, tstar = -1) {
   tmax <- length(y)
   x <- 1:tmax
   best_cp <- NULL
   min_loss <- Inf
   best_coefs <- NULL
-  
+  if(tstar == -1){
+    tstar = tmax / 2
+  }
   for (cp in 2:(tmax - 1)) {
     # Construct design matrix based on the given model
     X <- cbind(1, (x - cp), (x > cp) * (x - cp))
@@ -496,8 +499,8 @@ find_slope_changepoint_with_plot <- function(y, doplot = TRUE) {
 
 
 ## Implementation of the 3rd step in Algorithm 2 by recasting it as a linear programming problem.
-## This function will return the objective function value Sk in the paper for a given change point t 
-linf_cp=function(t,y,cp){
+## This function will return the objective function value Sk in the paper for a given change point cp
+linf_cp <- function(t,y,cp){
   n=length(t)
   nl=sum(t<cp)+1
   XL=matrix(1,nrow = nl,ncol=4)
@@ -538,13 +541,13 @@ linf_cp=function(t,y,cp){
 
 
 # changepoint detection using L-infinity norm
-linf_error=function(x){
+linf_error <- function(x, tmax, tstar){
   obf=NULL
   for (nk in 2:(tmax-1)) { ## find the point which minimize the obj func Sk, that is the change point 
     obf[nk]=linf_cp(1:tmax,x,nk)[1]
   }
   ecp=min(which(obf==min(obf[-1])))
-  return( c((ecp-tstar)/tmax ,  ecp) )
+  return((ecp-tstar)/tmax)
 }
 
 ## true distance matrix for Atlanta model
@@ -607,65 +610,81 @@ true_shuffle_Atlanta_dmv <- function(c, num_state , m){
   diag(True_shuffle_Dmv_square)=0
   return(True_shuffle_Dmv_square)
 }
-
-
-jump_Lbd=function(cp,p){
-  if(runif(1)<1-p){
-    np=cp
-  } else {
-    np=0.1+delta
+# 
+# # jump function at the left boundary
+# jump_Lbd=function(cp,p,delta){
+#   if(runif(1)<1-p){
+#     np=cp
+#   } else {
+#     np=0.1+delta
+#   }
+#   return(np)
+# }
+# 
+# # jump function at the right boundary
+# jump_Rbd=function(cp,p,delta){
+#   if(runif(1)<1-p){
+#     np=cp
+#   } else {
+#     np=0.9-delta
+#   }
+# }
+# 
+# # jump function in the middle points
+# jump_middle=function(cp,p,delta){
+#   u=runif(1)
+#   if(u<p){
+#     
+#     np=cp+delta
+#     
+#   }
+#   
+#   if(p<u & u<2*p){
+#     np=cp-delta
+#   }
+#   
+#   if(u>2*p){
+#     np=cp
+#   }
+#   return(np)
+# }
+# 
+# update latent positions in Atlanta method
+update_function <- function(current_position,p,delta){
+  u <- runif(1)
+  if(u < p){
+    current_position = current_position + delta
   }
-  return(np)
+  else if(u > 1 - p){
+    current_position = current_position - delta
+  }
+  if(current_position > 1){
+    return(1)
+  }
+  else if(current_position < 0){
+    return(0)
+  }
+  else{
+    return(current_position)
+  }
+  # if( abs(current_position-0.1)<10^(-10) ){
+  #   next_position=jump_Lbd(current_position,p,delta)
+  # }
+  # if(current_position> (0.1+10^(-10)) & current_position <(0.9-10^(-10)) ){
+  #   next_position=jump_middle(current_position,p,delta)
+  # }
+  # if(abs(current_position-0.9)<10^(-10)){
+  #   next_position=jump_Rbd(current_position,p,delta)
+  # }
+  # return(next_position)
 }
 
-
-jump_Rbd=function(cp,p){
-  if(runif(1)<1-p){
-    np=cp
-  } else {
-    np=0.9-delta
-  }
-}
-
-jump_middle=function(cp,p){
-  u=runif(1)
-  if(u<p){
-    
-    np=cp+delta
-    
-  }
-  
-  if(p<u & u<2*p){
-    np=cp-delta
-  }
-  
-  if(u>2*p){
-    np=cp
-  }
-  return(np)
-}
-
-
-# Use jump functions to determine next position
-update_function=function(current_position,p){
-  if( abs(current_position-0.1)<10^(-10) ){
-    next_position=jump_Lbd(current_position,p)
-  }
-  if(current_position> (0.1+10^(-10)) & current_position <(0.9-10^(-10)) ){
-    next_position=jump_middle(current_position,p)
-  }
-  if(abs(current_position-0.9)<10^(-10)){
-    next_position=jump_Rbd(current_position,p)
-  }
-  return(next_position)
-}
-
+# shuffle bottom del% vertices of graph with adj matrix A
 shuffle_perc_graph <- function(A, del, n){
   G=as.matrix(A)
-  print
   dn = floor(n*del)
   if(dn == 0)
-    return(A)
+    return(G)
   else{
     permu_vec=sample(1:dn)
     random_perm=diag(dn)[permu_vec,]
@@ -677,7 +696,8 @@ shuffle_perc_graph <- function(A, del, n){
   }
 }
 
-paired_error_in_shuffling_once <- function(n = 1000, p = 0.4, q = 0.15, m = 50, delta = 0.1, tstar = 25, del = c(0.1,0.2)){
+## one MC of errors in paired shuffled Atlant model
+paired_error_in_shuffling_once <- function(n = 300, p = 0.4, q = 0.15, m = 50, delta = 0.1, tstar = 25, del = c(0.1,0.2)){
   
   xt=matrix(0,nrow = n, ncol = m+1)
   initial_state_all_nodes=sample(seq(0,1,by=delta),n,replace = TRUE)
@@ -710,21 +730,22 @@ paired_error_in_shuffling_once <- function(n = 1000, p = 0.4, q = 0.15, m = 50, 
   
   D2=getD(df$xhat)
   df.mds <- doMDS(D2,doplot = FALSE)
-  df.iso <- doIso(df.mds, mdsd=10, AtlantaFlag=T)
+  df.iso <- doIso(df.mds$mds, mdsd=10)
   errors <- NULL
-  errors[1] <- linf_error(df.iso$iso, m)
+  errors[1] <- linf_error(df.iso$iso, tmax, tstar)
   i <- 2
   for(perc in del){
     D2_shuffle=getD(df[[paste0("xhat_", perc)]])
     df.mds_shuffle <- doMDS(D2_shuffle,doplot = FALSE)
-    df.iso_shuffle <- doIso(df.mds_shuffle, mdsd=10, AtlantaFlag=T)
-    errors[i] <- linf_error(df.iso_shuffle$iso, m)
+    df.iso_shuffle <- doIso(df.mds_shuffle$mds, mdsd=10)
+    errors[i] <- linf_error(df.iso_shuffle$iso, tmax, tstar)
     i <- i + 1
   }
-  print(paste(n,q,Sys.time()))
   errors
 }
-paired_error_in_shuffling <- function(nmc = 50, n = 1000, p = 0.4, q = 0.15, m = 50, delta = 0.1, tstar = 25, del = 0.1){
+
+# running nmc number of MCs on Atlanta
+paired_error_in_shuffling <- function(nmc = 50, n = 300, p = 0.4, q = 0.15, m = 50, delta = 0.1, tstar = 25, del = c(0.1,0.2)){
   mc_errors <- sapply(1:nmc, function(i) paired_error_in_shuffling_once(n, p, q, m, delta, tstar, del))
   row_mse <- apply(mc_errors, 1, function(row) mean(abs(row)^2)) # mean(abs(errors[row,])^2)
   row_sds <- apply(mc_errors, 1, function(row) sd(abs(row)^2) / sqrt(nmc)) # sd(abs(errors[row,])^2) / sqrt(nmc)
