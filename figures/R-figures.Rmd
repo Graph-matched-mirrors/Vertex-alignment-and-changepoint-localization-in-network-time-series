@@ -505,7 +505,21 @@ D_atlanta_W1 = getD_W1(df$xhat)
 atlanta_W1_mds = doMDS(D_atlanta_W1, doplot = T)
 
 
+n = 100
+tmax <- m <- 30
+p <- 0.3
+q <- 0.9
+delta <- (1-0.1)/tmax
+tstar <- m/2
 
+df <- doSim_London(n, tmax, delta, p, q, tstar)
+df <- df %>%
+  mutate(shuffle_g = map(g, ~optimized_shuffle_graph(.))) %>%
+  mutate(Xhat_shuffle = map(shuffle_g, function(x) full.ase(x,2)$Xhat[,1,drop=F]))
+
+D_london_W1 = getD_W1(df$xhat)
+London_W1_mds = doMDS(D_london_W1, doplot = F)
+true_London_W1_mds = doMDS(sqrt(true_W1_square_London(tmax, tstar , p , q )), doplot=F)
 
 df_plot <- bind_rows(
   # London
