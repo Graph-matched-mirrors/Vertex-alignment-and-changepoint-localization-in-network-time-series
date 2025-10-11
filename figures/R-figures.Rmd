@@ -1,6 +1,8 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -519,7 +521,7 @@ df <- df %>%
 
 D_london_W1 = getD_W1(df$xhat)
 London_W1_mds = doMDS(D_london_W1, doplot = F)
-true_London_W1_mds = doMDS(sqrt(true_W1_square_London(tmax, tstar , p , q )), doplot=F)
+true_London_W1_mds = doMDS(sqrt(true_W1_square_London(tmax, tstar , p , q,delta )), doplot=F)
 
 df_plot <- bind_rows(
   # London

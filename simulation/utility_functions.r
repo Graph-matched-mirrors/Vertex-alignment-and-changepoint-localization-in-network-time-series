@@ -59,6 +59,15 @@ shuffle_X <- function(X,del){
   return(random_perm %*% X)
 }
 
+#optimized shuffling function
+optimized_shuffle_graph <- function(A){
+  G=as.matrix(A)
+  permu_vec=sample(1:n)
+  permu_G <- G[permu_vec, permu_vec]  # directly permute rows and columns
+  G_graph=graph_from_adjacency_matrix(permu_G,mode ="undirected")
+  return(G_graph)
+}
+
 ## del is the set of shuffle percetage you want
 doSim_London <- function(n=300, tmax=40, delta=0.1, p=0.4, q=0.9, tstar=20 , del = c(1))
 {    
@@ -849,4 +858,5 @@ psi_Z_center = function(x, p, q){
   return(y)
 }
 psi_Z_center = Vectorize(psi_Z_center)
+
 
