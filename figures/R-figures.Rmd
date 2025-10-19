@@ -524,5 +524,123 @@ ggplot() +
 
 
 ```
+## Figure 3
+### London
+```{r fig.height=4, fig.width=10, message=FALSE, warning=FALSE}
+m <- 40
+tstar <- 20
+Num_states <- m 
+p <- 0.4
+q <- c(0.1, 0.2, 0.35, 0.4, 0.5)
+d <- seq(0.05, 1, by = 0.05)
+n <- 300
+nmc <- 100
+
+library(readr)
+
+final_errors <- read_csv("../simulation/simulation_results/final_errors_london.csv")
+# This file includes results of the simulation on London model for both l2 and l-infinity localizers, we extract l2 results
+final_mse=final_errors[,seq(1,20,4)]
+final_sd=final_errors[,seq(2,20,4)]
+
+support = seq(2/m-0.5, (m-1)/m-0.5,by=1/m)
+chance_level = sum(support^2/length(support))
 
 
+library(ggplot2)
+library(reshape2)
+# Convert matrix to data frame for ggplot2
+data_melt <- melt(as.matrix(final_mse))
+data_melt_sd <- melt(as.matrix(final_sd))
+
+shuffle_ratio=c(0,d)
+data_melt$Var1 <- factor(data_melt$Var1, labels = shuffle_ratio)
+data_melt$Var2 <- factor(data_melt$Var2, labels = q)
+
+data_melt_sd$Var1 <- factor(data_melt_sd$Var1, labels = shuffle_ratio)
+data_melt_sd$Var2 <- factor(data_melt_sd$Var2, labels = q)
+
+
+colnames(data_melt)=c('shuffle ratio','q','mean')
+colnames(data_melt_sd)=c('shuffle ratio','q','sd')
+
+summary=cbind(data_melt,data_melt_sd$sd)
+
+summary$lower=summary$mean-summary$`data_melt_sd$sd`*1.96
+summary$upper=summary$mean+summary$`data_melt_sd$sd`*1.96
+
+
+library(dplyr)  # For filtering the data
+
+plottt <- ggplot(summary, aes(x = `shuffle ratio`, y = mean, color = q, linetype=q ,group = q)) +
+  geom_line(linetype = "dashed") +
+  geom_hline(yintercept = chance_level, linetype = "dotted", color = "red") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +
+  labs(y = 'MSE', x = 'Shuffle ratio', color = 'q') +
+  theme(
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 15, face = "bold")
+  )
+
+print(plottt)
+```
+
+### Atlanta
+```{r fig.height=4, fig.width=10, message=FALSE, warning=FALSE}
+
+m <- 40
+tstar <- 20
+Num_states <- 50
+p <- 0.4
+q <- c(0.1, 0.2, 0.35, 0.4, 0.5)
+d <- seq(0.05, 1, by = 0.05)
+n <- 300
+nmc <- 100
+
+library(readr)
+
+final_errors <- read_csv("../simulation/simulation_results/final_errors_Atlanta3.csv")
+final_mse=final_errors[,seq(1,10,2)]
+final_sd=final_errors[,seq(2,10,2)]
+
+support = seq(2/m-0.5, (m-1)/m-0.5,by=1/m)
+chance_level = sum(support^2/length(support))
+
+
+library(ggplot2)
+library(reshape2)
+# Convert matrix to data frame for ggplot2
+data_melt <- melt(as.matrix(final_mse))
+data_melt_sd <- melt(as.matrix(final_sd))
+
+shuffle_ratio=c(0,d)
+data_melt$Var1 <- factor(data_melt$Var1, labels = shuffle_ratio)
+data_melt$Var2 <- factor(data_melt$Var2, labels = q)
+
+data_melt_sd$Var1 <- factor(data_melt_sd$Var1, labels = shuffle_ratio)
+data_melt_sd$Var2 <- factor(data_melt_sd$Var2, labels = q)
+
+
+colnames(data_melt)=c('shuffle ratio','q','mean')
+colnames(data_melt_sd)=c('shuffle ratio','q','sd')
+
+summary=cbind(data_melt,data_melt_sd$sd)
+
+summary$lower=summary$mean-summary$`data_melt_sd$sd`*1.96
+summary$upper=summary$mean+summary$`data_melt_sd$sd`*1.96
+
+
+library(dplyr)  # For filtering the data
+
+plottt <- ggplot(summary, aes(x = `shuffle ratio`, y = mean, color = q, linetype=q ,group = q)) +
+  geom_line(linetype = "dashed") +
+  geom_hline(yintercept = chance_level, linetype = "dotted", color = "red") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +
+  labs(y = 'MSE', x = 'Shuffle ratio', color = 'q') +
+  theme(
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 15, face = "bold")
+  )
+
+print(plottt)
+```
