@@ -524,8 +524,11 @@ ggplot() +
 
 
 ```
+
 ## Figure 3
+
 ### London
+
 ```{r fig.height=4, fig.width=10, message=FALSE, warning=FALSE}
 m <- 40
 tstar <- 20
@@ -599,7 +602,7 @@ nmc <- 100
 
 library(readr)
 
-final_errors <- read_csv("../simulation/simulation_results/final_errors_Atlanta3.csv")
+final_errors <- read_csv("../simulation/simulation_results/final_errors_Atlanta.csv")
 final_mse=final_errors[,seq(1,10,2)]
 final_sd=final_errors[,seq(2,10,2)]
 
