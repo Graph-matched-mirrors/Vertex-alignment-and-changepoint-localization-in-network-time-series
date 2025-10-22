@@ -11,7 +11,7 @@ Core library of helper routines shared across all scripts:
   - `trueAtlantadmv`, `trueshuffleAtlantadmv` for the Atlanta latent process model.
 - Defines error functions such as `pairederrorinshuffling`, and shuffling/perturbation utilities.
 - Serves as support functions for simulation scripts (`MCSim_London.R`, `MCSim_Atlanta.R`).
-
+- multiple functions adopted from [TianyiChen97 / Euclidean-mirrors-and-first-order-changepoints-in-network-time-series](https://github.com/TianyiChen97/Euclidean-mirrors-and-first-order-changepoints-in-network-time-series)
 ---
 
 ### 2. `London_model_simulation_functions.R`
