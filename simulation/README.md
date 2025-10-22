@@ -33,7 +33,7 @@ Full Monte Carlo simulation for the **London Model**:
 
 ### 4. `MCSim_Atlanta.R`
 Full Monte Carlo simulation for the **Atlanta Model**:
-- Same purpose as above but for Atlanta model incorporating parameters `(p, q, m, δ, t*)`.
+- Same purpose as above but for Atlanta model incorporating parameters `p, q, m, δ, t*`.
 
 ---
 
