@@ -5,9 +5,9 @@ This repository contains code supporting the text "Vertex-alignment-and-changepo
 
 ## Repository Structure
 
-- **demos/** — Contains simulation scripts that demonstrate the core functionality of our methods. Parameters can be modified to explore different experimental settings.  
-- **figures/** — Includes code to reproduce all figures presented in the paper exactly.  
-- **simulation/** — Provides the full implementation and scripts used to generate the experimental results reported in the paper.  
+- **demos** — Contains simulation scripts that demonstrate the core functionality of our methods. Parameters can be modified to explore different experimental settings.  
+- **figures** — Includes code to reproduce all figures presented in the paper exactly.  
+- **simulation** — Provides the full implementation and scripts used to generate the experimental results reported in the paper.  
 
 
 [^1]: Co-first author
