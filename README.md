@@ -2,6 +2,19 @@
 
 This repository contains code supporting the text "Vertex-alignment-and-changepoint-localization-in-network-time-series" by Tianyi Chen[^1], Mohammad Sharifi Kiasari[^2], Sijing Yu, Youngser Park, Avanti Athreya, Vince Lyzinski, Carey Priebe, Zachary Lubberts
 
+## Abstrat:
+Changepoint localization in a time series of networks generally relies on accurate vertex correspondence between
+network realizations at different times. However, such vertex alignments are often misspecified or even unknown.
+We show how misalignment between network realizations at different times can weaken their underlying correlation,
+impeding inference procedures that rely on accurate correlation estimates. We explore the conceptual relationship
+between graph matching and optimal transport, an approach often considered for mitigating errors from misalignment.
+We construct two illustrative models for network evolution, each with a similar changepoint. We compare techniques for
+changepoint localization, ranging from the simple network statistic of average degree to the more involved and recently
+developed procedure of Euclidean mirrors. In one model, vertex misalignment causes comparatively little error, and
+in the other, it seriously impairs localization, a problem where graph matching proves ineffective. Despite this, the
+Euclidean mirror procedure can still extract meaningful signal when the misalignment portion is small. Finally We
+present simulations to illustrate these contrasting effects on approaches to localization.
+
 
 ## Repository Structure
 
