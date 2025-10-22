@@ -20,8 +20,15 @@ present simulations to illustrate these contrasting effects on approaches to loc
 
 - **demos** — Contains simulation scripts that demonstrate the core functionality of our methods. Parameters can be modified to explore different experimental settings.  
 - **figures** — Includes code to reproduce all figures presented in the paper exactly.  
-- **simulation** — Provides the full implementation and scripts used to generate the experimental results reported in the paper.  
+- **simulation** — Provides the full implementation and scripts used to generate the experimental results reported in the paper, multiple functions adopted from [TianyiChen97 / Euclidean-mirrors-and-first-order-changepoints-in-network-time-series](https://github.com/TianyiChen97/Euclidean-mirrors-and-first-order-changepoints-in-network-time-series)
 
 
 [^1]: Co-first author
 [^2]: Co-first author
+
+## Citation
+
+Chen, T., Lubberts, Z., Athreya, A., Park, Y., & Priebe, C. E. (2025).  
+*Euclidean Mirrors and First-Order Changepoints in Network Time Series* [Computer software]. GitHub.  
+Available at: [https://github.com/TianyiChen97/Euclidean-mirrors-and-first-order-changepoints-in-network-time-series](https://github.com/TianyiChen97/Euclidean-mirrors-and-first-order-changepoints-in-network-time-series)
+
