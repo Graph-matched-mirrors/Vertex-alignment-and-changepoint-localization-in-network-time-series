@@ -34,3 +34,10 @@ Full Monte Carlo simulation for the **London Model**:
 ### 4. `MCSim_Atlanta.R`
 Full Monte Carlo simulation for the **Atlanta Model**:
 - Same purpose as above but for Atlanta model incorporating parameters `(p, q, m, δ, t*)`.
+
+---
+
+### 5. `summary_London-tables-and-plots-_NEW.R`/`summary_Atlanta-tables-and-plots-_NEW.R`
+- Contains tables and plots summarizing simulation results.
+- Used for analysis and visualization of simulation data from the London/Atlanta model.
+
