@@ -388,7 +388,9 @@ ggplot() +
   )
 
 ```
+
 ## Figures of W1 distance for both London and Atlanta
+
 ```{r fig.height=3, fig.width=6, message=FALSE, warning=FALSE}
 
 
