@@ -1,4 +1,6 @@
-Scripts are organized by **model** (London, Atlanta) and by **functionality** (simulation, analysis, visualization).  
+Scripts are organized by **model** (London, Atlanta) and by **functionality** (simulation, analysis, visualization).  Many functions (mostly in utility_functions.r) builds upon tools and methods from the **Euclidean Mirror Graph Matching** project, available at:
+
+[TianyiChen97 / Euclidean_mirror_graph_matching](https://github.com/TianyiChen97/Euclidean_mirror_graph_matching)
 
 ---
 
