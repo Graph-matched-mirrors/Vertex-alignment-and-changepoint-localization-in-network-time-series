@@ -1,1 +1,23 @@
-will be update soon
+This folder contains scripts to reproduce plots in the paper  
+
+---
+
+### 1. `R-figures.Rmd`
+Main R Markdown workflow for generating figures and simulation outputs presented in the paper.  
+- Figures 1–3 for **London** and **Atlanta** models.   
+- Outputs final compiled figures in `R-figures.pdf`.
+  
+---
+
+### 2. `R-figures.pdf`
+Outputs from the R Markdown analysis above
+
+---
+
+### 3. `fig5-6-appendix-Models_Illustration.ipynb`
+- Appendix Figures 5–6
+
+---
+
+### 4. `simulated_swarm_data_figure/simulated_swarm_data_figure.R`
+- Visualization script swarm data
