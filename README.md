@@ -2,7 +2,7 @@
 
 This repository contains code supporting the text "Vertex-alignment-and-changepoint-localization-in-network-time-series" by Tianyi Chen[^1], Mohammad Sharifi Kiasari[^2], Sijing Yu, Youngser Park, Avanti Athreya, Vince Lyzinski, Carey Priebe, Zachary Lubberts
 
-## Abstrat:
+## Abstract
 Changepoint localization in a time series of networks generally relies on accurate vertex correspondence between
 network realizations at different times. However, such vertex alignments are often misspecified or even unknown.
 We show how misalignment between network realizations at different times can weaken their underlying correlation,
