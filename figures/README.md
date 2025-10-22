@@ -10,12 +10,12 @@ Main R Markdown workflow for generating figures and simulation outputs presented
 ---
 
 ### 2. `R-figures.pdf`
-Outputs from the R Markdown analysis above
+- Outputs of the above.
 
 ---
 
 ### 3. `fig5-6-appendix-Models_Illustration.ipynb`
-- Appendix Figures 5, 6 the illusration of sample paths and generated TSG from **London** and **Atlanta** models.
+- Figures 5, 6 in the appendix: the illusration of sample paths and generated TSG from **London** and **Atlanta** models.
 
 ---
 
