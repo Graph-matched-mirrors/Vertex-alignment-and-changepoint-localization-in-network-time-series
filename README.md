@@ -18,7 +18,6 @@ present simulations to illustrate these contrasting effects on approaches to loc
 
 ## Repository Structure
 
-- **demos** — Contains simulation scripts that demonstrate the core functionality of our methods. Parameters can be modified to explore different experimental settings.  
 - **figures** — Includes code to reproduce all figures presented in the paper exactly.  
 - **simulation** — Provides the full implementation and scripts used to generate the experimental results reported in the paper, multiple functions adopted from [TianyiChen97 / Euclidean-mirrors-and-first-order-changepoints-in-network-time-series](https://github.com/TianyiChen97/Euclidean-mirrors-and-first-order-changepoints-in-network-time-series)
 
