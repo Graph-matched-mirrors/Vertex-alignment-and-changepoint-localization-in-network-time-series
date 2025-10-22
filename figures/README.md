@@ -15,9 +15,9 @@ Outputs from the R Markdown analysis above
 ---
 
 ### 3. `fig5-6-appendix-Models_Illustration.ipynb`
-- Appendix Figures 5–6
+- Appendix Figures 5, 6 the illusration of sample paths and generated TSG from **London** and **Atlanta** models.
 
 ---
 
 ### 4. `simulated_swarm_data_figure/simulated_swarm_data_figure.R`
-- Visualization script swarm data
+- mirrors with different dissimilarities applied on simulated swarm data
