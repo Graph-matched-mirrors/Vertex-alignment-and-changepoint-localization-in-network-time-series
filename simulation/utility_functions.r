@@ -623,73 +623,57 @@ true_shuffle_Atlanta_dmv <- function(c, num_state , m){
   diag(True_shuffle_Dmv_square)=0
   return(True_shuffle_Dmv_square)
 }
-# 
-# # jump function at the left boundary
-# jump_Lbd=function(cp,p,delta){
-#   if(runif(1)<1-p){
-#     np=cp
-#   } else {
-#     np=0.1+delta
-#   }
-#   return(np)
-# }
-# 
-# # jump function at the right boundary
-# jump_Rbd=function(cp,p,delta){
-#   if(runif(1)<1-p){
-#     np=cp
-#   } else {
-#     np=0.9-delta
-#   }
-# }
-# 
-# # jump function in the middle points
-# jump_middle=function(cp,p,delta){
-#   u=runif(1)
-#   if(u<p){
-#     
-#     np=cp+delta
-#     
-#   }
-#   
-#   if(p<u & u<2*p){
-#     np=cp-delta
-#   }
-#   
-#   if(u>2*p){
-#     np=cp
-#   }
-#   return(np)
-# }
-# 
-# update latent positions in Atlanta method
+# jump function at the left boundary
+jump_Lbd=function(cp,p,delta){
+  if(runif(1)<1-p){
+    np=cp
+  } else {
+    np=0.1+delta
+  }
+  return(np)
+}
+
+# jump function at the right boundary
+jump_Rbd=function(cp,p,delta){
+  if(runif(1)<1-p){
+    np=cp
+  } else {
+    np=0.9-delta
+  }
+  return(np)
+}
+
+# jump function in the middle points
+jump_middle=function(cp,p,delta){
+  u=runif(1)
+  if(u<p){
+    
+    np=cp+delta
+    
+  }
+  
+  if(p<u & u<2*p){
+    np=cp-delta
+  }
+  
+  if(u>2*p){
+    np=cp
+  }
+  return(np)
+}
+
+# update latent positions in Atlanta model
 update_function <- function(current_position,p,delta){
-  u <- runif(1)
-  if(u < p){
-    current_position = current_position + delta
+  if( abs(current_position-0.1)<10^(-10) ){
+    next_position=jump_Lbd(current_position,p,delta)
   }
-  else if(u > 1 - p){
-    current_position = current_position - delta
+  if(current_position> (0.1+10^(-10)) & current_position <(0.9-10^(-10)) ){
+    next_position=jump_middle(current_position,p,delta)
   }
-  if(current_position > 1){
-    return(1)
+  if(abs(current_position-0.9)<10^(-10)){
+    next_position=jump_Rbd(current_position,p,delta)
   }
-  else if(current_position < 0){
-    return(0)
-  }
-  else{
-    return(current_position)
-  }
-  # if( abs(current_position-0.1)<10^(-10) ){
-  #   next_position=jump_Lbd(current_position,p,delta)
-  # }
-  # if(current_position> (0.1+10^(-10)) & current_position <(0.9-10^(-10)) ){
-  #   next_position=jump_middle(current_position,p,delta)
-  # }
-  # if(abs(current_position-0.9)<10^(-10)){
-  #   next_position=jump_Rbd(current_position,p,delta)
-  # }
-  # return(next_position)
+  return(next_position)
 }
 
 # shuffle bottom del% vertices of graph with adj matrix A

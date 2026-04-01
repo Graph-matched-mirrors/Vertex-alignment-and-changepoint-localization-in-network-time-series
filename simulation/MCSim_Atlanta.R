@@ -632,6 +632,7 @@ jump_Rbd=function(cp,p){
   } else {
     np=0.9-delta
   }
+  return(np)
 }
 
 jump_middle=function(cp,p){
