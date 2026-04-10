@@ -843,4 +843,20 @@ psi_Z_center = function(x, p, q){
 }
 psi_Z_center = Vectorize(psi_Z_center)
 
-
+shuffle_X_optimized <- function(X, del) {
+  n <- nrow(X)
+  dn <- floor(del * n)
+  
+  if (dn == 0) {
+    return(X)
+  }
+  
+  unchanged_indices <- 1:(n - dn)
+  
+  rows_to_shuffle <- (n - dn + 1):n
+  
+  shuffled_part <- sample(rows_to_shuffle)
+  
+  final_order <- c(unchanged_indices, shuffled_part)
+  return(X[final_order, , drop = FALSE])
+}
