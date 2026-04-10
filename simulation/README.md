@@ -25,19 +25,17 @@ Functions for **London model simulations**:
 
 ### 3. `MCSim_London.R`
 Full Monte Carlo simulation for the **London Model**:
-- Uses functions including embedding, MDS, ISOmap, shuffling to simulate London Model
-- Produces analyses and visualisation for metrics including MDS/ISOMAP.
-- Comprehensive simulation for different parameters (e.g. change probabilities `p`, `q`, number of nodes `n`).
+- Uses functions including embedding, MDS, ISOmap, shuffling to simulate London Model for changepoint localization task.
+- Output simulation results for different metrics including MDS/ISOMAP.
+- Simulation for different parameters (e.g. change probabilities `p`, `q`, number of nodes `n`).
 
 ---
 
 ### 4. `MCSim_Atlanta.R`
 Full Monte Carlo simulation for the **Atlanta Model**:
-- Same purpose as above but for Atlanta model incorporating parameters `p, q, m, δ, t*`.
+- Same purpose as above but for Atlanta model incorporating parameters `p, q, m, $\delta$, $t^*$`.
 
 ---
 
 ### 5. `summary_London-tables-and-plots-_NEW.R`/`summary_Atlanta-tables-and-plots-_NEW.R`
-- Contains tables and plots summarizing simulation results.
-- Used for analysis and visualization of simulation data from the London/Atlanta model.
-
+- Input simulation results stored in 'simulation results folder...' and generate tables and plots (Table ?? and Figure ?? ) to summarize simulation results.
