@@ -2,9 +2,10 @@ This folder contains scripts to reproduce plots in the paper
 
 ---
 
+
 ### 1. `R-figures.Rmd`
 Main R Markdown workflow for generating figures and simulation outputs presented in the paper.  
-- Figures 1–3 for **London** and **Atlanta** models.   
+- Figures 2&3 for **London** and **Atlanta** models.   
 - Outputs final compiled figures in `R-figures.pdf`.
   
 ---
