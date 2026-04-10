@@ -6,9 +6,9 @@ Scripts are organized by **model** (London, Atlanta) and by **functionality** (s
 Core library of helper routines shared across all scripts:
 - Implements **Random Dot Product Graph (RDPG)** sampling (`rdpg.sample`) and **Adjacency Spectral Embedding (ASE)**.
 - Provides **Procrustes** (`procrustes2`), **distance estimators** (`getD`, `getDW1`, `getDW2`), and **Multidimensional Scaling (MDS)** operations (`doMDS`).
-- Implements required calculations for both **London** and **Atlanta** models:
-  - `trueLondondMV`, `trueW1squareLondon` for the London changepoint model.
-  - `trueAtlantadmv`, `trueshuffleAtlantadmv` for the Atlanta latent process model.
+- Implements required calculations for both true shuddled/dMV/W1 distance of **London** and **Atlanta** models:
+  - `trueLondondMV`, `trueW1squareLondon` for the London model.
+  - `trueAtlantadmv`, `trueshuffleAtlantadmv` for the Atlanta model.
 - Defines error functions such as `pairederrorinshuffling`, and shuffling/perturbation utilities.
 - Serves as support functions for simulation scripts (`MCSim_London.R`, `MCSim_Atlanta.R`).
 - multiple functions adopted from the other [paper](https://github.com/TianyiChen97/Euclidean-mirrors-and-first-order-changepoints-in-network-time-series).
@@ -18,7 +18,7 @@ Core library of helper routines shared across all scripts:
 Functions for **London model simulations**:
 - Experiments to estimate changepoint detection accuracy under different perturbations.
 - Functions include `simulatenetworkchangepoint`, `analyzenetworkchangepoint`, and `analyzeshufflingerrors`.
-- Computes **L∞ errors** across multiple network distance metrics: average degree, W₁, W₂, and dMV.
+- Computes **$l_{\infty}$ errors** across multiple network distance metrics: average degree, W₁, W₂, and dMV.
 - Generates plots summarizing estimation accuracy across network sizes and shuffling ratios.
 
 ---
