@@ -14,15 +14,6 @@ Core library of helper routines shared across all scripts:
 - multiple functions adopted from the other [paper](https://github.com/TianyiChen97/Euclidean-mirrors-and-first-order-changepoints-in-network-time-series).
 ---
 
-### 2. `London_model_simulation_functions.R`
-Functions for **London model simulations**:
-- Experiments to estimate changepoint detection accuracy under different perturbations.
-- Functions include `simulatenetworkchangepoint`, `analyzenetworkchangepoint`, and `analyzeshufflingerrors`.
-- Computes **$l_{\infty}$ errors** across multiple network distance metrics: average degree, W₁, W₂, and dMV.
-- Generates plots summarizing estimation accuracy across network sizes and shuffling ratios.
-
----
-
 ### 3. `MCSim_London.R`
 Full Monte Carlo simulation for the **London Model**:
 - Uses functions including embedding, MDS, ISOmap, shuffling to simulate London Model for changepoint localization task.
